@@ -60,6 +60,8 @@ export function OrchestraExplorer() {
 
   const model = useMemo(() => computeModel(inputs), [inputs])
   const typical = mode === "explore" ? TYPICAL[isRealOrg(city) ? REAL_PRESETS[city].tier : city] : {}
+  const isProfitable = model.totalResult >= 0
+  const statusLabel = isProfitable ? "Operating surplus" : "Operating deficit"
 
   function set<K extends keyof Inputs>(key: K, value: Inputs[K]) {
     setInputs((prev) => ({ ...prev, [key]: value }))
@@ -136,7 +138,31 @@ export function OrchestraExplorer() {
   )
 
   return (
-    <div className="flex flex-col gap-6">
+    <div
+      className={`flex flex-col gap-6 rounded-xl border p-3 transition-colors duration-500 sm:p-4 ${
+        isProfitable
+          ? "border-green-500/40 bg-green-500/[0.03]"
+          : "border-red-500/40 bg-red-500/[0.03]"
+      }`}
+    >
+      <div
+        className={`flex items-center justify-between rounded-lg border px-4 py-3 transition-colors duration-500 ${
+          isProfitable
+            ? "border-green-500/30 bg-green-500/10"
+            : "border-red-500/30 bg-red-500/10"
+        }`}
+      >
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Current season status</p>
+          <p className={`mt-1 text-sm font-semibold ${isProfitable ? "text-green-500" : "text-red-500"}`}>
+            {statusLabel}
+          </p>
+        </div>
+        <p className={`text-lg font-semibold tabular-nums ${isProfitable ? "text-green-500" : "text-red-500"}`}>
+          {model.totalResult >= 0 ? "+" : ""}{fmtMoney(model.totalResult)}
+        </p>
+      </div>
+
       {/* Mode toggle */}
       <div className="inline-flex w-fit rounded-lg border border-border bg-card p-1">
         {(["explore", "challenge"] as Mode[]).map((m) => (

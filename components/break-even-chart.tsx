@@ -13,6 +13,9 @@ import { fmtCompact, fmtMoney, type Model } from "@/lib/orchestra-model"
 import { ChartBox } from "@/components/chart-box"
 
 export function BreakEvenChart({ model, attendance }: { model: Model; attendance: number }) {
+  const resultColor = model.totalResult >= 0 ? "var(--success)" : "var(--destructive)"
+  const resultColorClass = model.totalResult >= 0 ? "bg-green-500" : "bg-red-500"
+
   const { series, breakEvenPct } = model
 
   return (
@@ -24,7 +27,7 @@ export function BreakEvenChart({ model, attendance }: { model: Model; attendance
             <span className="h-0.5 w-4 bg-foreground" aria-hidden /> Earned only
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-0.5 w-4 bg-destructive" aria-hidden /> With donations
+            <span className={`h-0.5 w-4 ${resultColorClass}`} aria-hidden /> With donations
           </span>
         </div>
       </div>
@@ -84,7 +87,7 @@ export function BreakEvenChart({ model, attendance }: { model: Model; attendance
               type="monotone"
               dataKey="total"
               name="With donations"
-              stroke="var(--destructive)"
+              stroke={resultColor}
               strokeWidth={2.5}
               dot={false}
               isAnimationActive={false}
@@ -95,12 +98,12 @@ export function BreakEvenChart({ model, attendance }: { model: Model; attendance
         {Number.isFinite(breakEvenPct) && breakEvenPct <= 100 ? (
           <>
             Ticket and touring income alone breaks even at{" "}
-            <strong className="text-foreground">{breakEvenPct.toFixed(0)}%</strong> attendance. The green line shows how
-            donations lift the result above zero.
+            <strong className="text-foreground">{breakEvenPct.toFixed(0)}%</strong> attendance. The{" "}
+            {model.totalResult >= 0 ? "green" : "red"} line shows the current result after donations.
           </>
         ) : (
           <>
-            Even a sold-out season cannot break even on earned income alone &mdash; donations (green line) are essential.
+            Even a sold-out season cannot break even on earned income alone &mdash; donations ({model.totalResult >= 0 ? "green" : "red"} line) are essential.
           </>
         )}
       </p>
