@@ -110,7 +110,11 @@ function Stat({
   tone: "good" | "bad" | "muted"
 }) {
   const color =
-    tone === "good" ? "text-success" : tone === "bad" ? "text-destructive" : "text-foreground"
+    tone === "good"
+      ? "text-success"
+      : tone === "bad"
+        ? "text-red-500 dark:text-red-400"
+        : "text-foreground"
   return (
     <div className="rounded-md border border-border bg-background px-3 py-2">
       <p className="text-xs text-muted-foreground">{label}</p>
