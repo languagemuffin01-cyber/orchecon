@@ -29,7 +29,9 @@ export function ChallengePanel({
   return (
     <div
       className={`rounded-lg border p-5 ${
-        solved ? "border-success/50 bg-success/10" : "border-destructive/40 bg-destructive/5"
+        sustainable
+          ? "border-success/50 bg-success/10"
+          : "border-red-500/40 bg-red-500/5"
       }`}
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -74,13 +76,13 @@ export function ChallengePanel({
         className={`mt-4 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
           solved
             ? "bg-success/20 text-success-foreground"
-            : "bg-destructive/10 text-destructive"
+            : "bg-red-500/10 text-red-600 dark:text-red-400"
         }`}
         role="status"
         aria-live="polite"
       >
         <span
-          className={`inline-block h-2 w-2 rounded-full ${solved ? "bg-success" : "bg-destructive"}`}
+          className={`inline-block h-2 w-2 rounded-full ${solved ? "bg-success" : "bg-red-500"}`}
           aria-hidden="true"
         />
         {solved
